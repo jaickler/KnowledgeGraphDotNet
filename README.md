@@ -1,3 +1,4 @@
+[![build and test](https://github.com/jaickler/KnowledgeGraphDotNet/actions/workflows/dotnettest.yml/badge.svg)](https://github.com/jaickler/KnowledgeGraphDotNet/actions/workflows/dotnettest.yml)
 # KnowledgeGraphDotNet
 A project to help standardize the use of knowledge graphs in LLM applications. It is my belief that knowledge graphs provide a route to make all locally relevant knowledge easily accessible to the agent even if that knowledge is not semantically similar or close in proximity to the processed original text.
 # Contribute
