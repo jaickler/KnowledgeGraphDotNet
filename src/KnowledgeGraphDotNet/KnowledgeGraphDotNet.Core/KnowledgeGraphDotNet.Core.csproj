@@ -4,6 +4,11 @@
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageId>Ickler.KnowledgeGraphDotNet.Core</PackageId>
+        <Version>0.0.1</Version>
+        <Title>KnowledgeGraphDotNet.Core</Title>
+        <Authors>Jea</Authors>
     </PropertyGroup>
 
 </Project>
