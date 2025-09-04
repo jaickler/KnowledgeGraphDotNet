@@ -6,6 +6,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KnowledgeGraphDotNet.Tests"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KnowledgeGraphDotNet.Abstract", "KnowledgeGraphDotNet.Abstract\KnowledgeGraphDotNet.Abstract.csproj", "{01F72E16-A450-497A-939C-68BC473B2687}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{981CA5F3-E1BA-4A76-8640-090DB941C7E4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KnowledgeGraphDotNet.Examples.CreateFromShortStory", "KnowledgeGraphDotNet.Examples.CreateFromShortStory\KnowledgeGraphDotNet.Examples.CreateFromShortStory.csproj", "{2B280843-674E-40A8-83A4-5FF59D578CA7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +28,12 @@ Global
 		{01F72E16-A450-497A-939C-68BC473B2687}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{01F72E16-A450-497A-939C-68BC473B2687}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{01F72E16-A450-497A-939C-68BC473B2687}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B280843-674E-40A8-83A4-5FF59D578CA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B280843-674E-40A8-83A4-5FF59D578CA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B280843-674E-40A8-83A4-5FF59D578CA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B280843-674E-40A8-83A4-5FF59D578CA7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2B280843-674E-40A8-83A4-5FF59D578CA7} = {981CA5F3-E1BA-4A76-8640-090DB941C7E4}
 	EndGlobalSection
 EndGlobal

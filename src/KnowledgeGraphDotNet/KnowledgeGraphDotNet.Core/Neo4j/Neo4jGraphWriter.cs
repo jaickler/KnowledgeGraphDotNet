@@ -6,20 +6,19 @@ using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Neo4j.Driver;
-using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace KnowledgeGraphDotNet.Core.Neo4j;
 
 public class Neo4jGraphWriter(
     IDriver driver,
     IChatClient chatClient,
-    IOptions<Neo4JGraphReaderOptions> options,
-    ILogger? logger) : IGraphWriter
+    IOptions<Neo4JGraphOptions> options,
+    ILogger<Neo4jGraphWriter>? logger) : IGraphWriter
 {
     private readonly IChatClient _chatClient = chatClient;
     private readonly IDriver _driver = driver;
-    private readonly IOptions<Neo4JGraphReaderOptions> _options = options;
-    private readonly ILogger? _logger = logger;
+    private readonly ILogger<Neo4jGraphWriter>? _logger = logger;
+    private readonly IOptions<Neo4JGraphOptions> _options = options;
 
     public GraphWriteOperation WriteInformation(string information)
     {

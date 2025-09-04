@@ -5,6 +5,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
+        <UserSecretsId>fd456d55-fff9-44b1-9cda-9b61d0673514</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
@@ -16,6 +17,10 @@
 
     <ItemGroup>
         <Using Include="Xunit"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\KnowledgeGraphDotNet.Core\KnowledgeGraphDotNet.Core.csproj"/>
     </ItemGroup>
 
 </Project>
