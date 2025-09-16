@@ -1,4 +1,8 @@
+using System.Text.Json;
+using KnowledgeGraphDotNet.Abstract.DataExtraction;
 using KnowledgeGraphDotNet.Abstract.KnowledgeGraph;
+using KnowledgeGraphDotNet.Core.DataExtraction;
+using KnowledgeGraphDotNet.Core.DataExtraction.Config;
 using KnowledgeGraphDotNet.Core.Neo4j.Config;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,7 +40,13 @@ public static class ServiceCollectionExtensions
                 return GraphDatabase.Driver(options.Uri, AuthTokens.Basic(options.Username,
                     options.Password));
             })
-            .AddScoped<IGraphWriter, Neo4jGraphWriter>();
+            .AddScoped<IGraphWriter, Neo4jGraphWriter>()
+            .AddScoped<IEntityExtractor, ChatClientEntityExtractor>()
+            .AddKeyedScoped<JsonSerializerOptions>("ExtractionJsonSerializationOptions",
+                (_, _) => new(JsonSerializerDefaults.General)
+            {
+                TypeInfoResolverChain = { Neo4JExtractionJsonContext.Default }
+            });
 
         return serviceCollection;
     }

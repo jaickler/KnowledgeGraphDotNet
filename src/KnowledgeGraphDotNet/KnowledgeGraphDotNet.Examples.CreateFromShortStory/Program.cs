@@ -1,6 +1,7 @@
 ﻿using KnowledgeGraphDotNet.Abstract.KnowledgeGraph;
 using KnowledgeGraphDotNet.Core.Neo4j.Extensions;
 using KnowledgeGraphDotNet.Examples.CreateFromShortStory.Config;
+using KnowledgeGraphDotNet.Examples.CreateFromShortStory.Config.Validation;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,11 +27,11 @@ internal class Program
             logBuilder.ColorBehavior = LoggerColorBehavior.Enabled;
             logBuilder.TimestampFormat = "HH:mm:ss ";
             logBuilder.IncludeScopes = true;
-        });
+        }).AddFilter(((_) => true));
 
-        builder.Services.AddOptions<OpenAiOptions>()
+        builder.Services.AddSingleton<IValidateOptions<OpenAiOptions>, ValidateOpenAiOptions>()
+            .AddOptions<OpenAiOptions>()
             .Bind(builder.Configuration.GetSection(nameof(OpenAiOptions)))
-            .ValidateDataAnnotations()
             .ValidateOnStart();
 
         builder.Services.AddSingleton<IChatClient>(sp =>
@@ -45,8 +46,9 @@ internal class Program
 
         var writer = app.Services.GetRequiredService<IGraphWriter>();
 
-        await writer.WriteInformationAsync("Bob is a fool.", CancellationToken.None);
-
-        Console.WriteLine("Hello, World!");
+        await foreach(var operation in writer.WriteInformationAsync("Bob is a fool that loves Alice. Alice is a cryptographer that wants to speak with Bob securely to hear what he wnats to tell her.", CancellationToken.None))
+        {
+            Console.WriteLine(operation.ToString());
+        }
     }
 }

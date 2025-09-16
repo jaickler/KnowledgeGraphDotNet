@@ -5,6 +5,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <IsAotCompatible>true</IsAotCompatible>
         <PackageId>Ickler.KnowledgeGraphDotNet.Core</PackageId>
         <Version>0.0.1</Version>
         <Title>KnowledgeGraphDotNet.Core</Title>
@@ -16,6 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.AI" Version="9.8.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.8"/>
         <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.8"/>
         <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.8"/>

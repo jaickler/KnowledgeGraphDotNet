@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace KnowledgeGraphDotNet.Examples.CreateFromShortStory.Config;
 
-internal class OpenAiOptions
+public class OpenAiOptions
 {
     [Required] public required string ApiKey { get; set; }
 

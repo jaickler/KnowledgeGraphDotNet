@@ -5,6 +5,8 @@
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <PublishAot>true</PublishAot>
+        <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
         <InvariantGlobalization>true</InvariantGlobalization>
         <UserSecretsId>0d51415f-e133-41f5-9b45-5e3dccfc25aa</UserSecretsId>
     </PropertyGroup>

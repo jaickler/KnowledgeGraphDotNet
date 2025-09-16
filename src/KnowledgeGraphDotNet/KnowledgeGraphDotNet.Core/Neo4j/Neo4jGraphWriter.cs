@@ -1,4 +1,6 @@
+using System.Runtime.CompilerServices;
 using System.Text;
+using KnowledgeGraphDotNet.Abstract.DataExtraction;
 using KnowledgeGraphDotNet.Abstract.KnowledgeGraph;
 using KnowledgeGraphDotNet.Abstract.KnowledgeGraph.Operations;
 using KnowledgeGraphDotNet.Core.Neo4j.Config;
@@ -13,49 +15,68 @@ public class Neo4jGraphWriter(
     IDriver driver,
     IChatClient chatClient,
     IOptions<Neo4JGraphOptions> options,
-    ILogger<Neo4jGraphWriter>? logger) : IGraphWriter
+    ILogger<Neo4jGraphWriter>? logger,
+    IEntityExtractor entityExtractor) : IGraphWriter
 {
     private readonly IChatClient _chatClient = chatClient;
     private readonly IDriver _driver = driver;
+    private readonly IEntityExtractor _entityExtractor = entityExtractor;
     private readonly ILogger<Neo4jGraphWriter>? _logger = logger;
     private readonly IOptions<Neo4JGraphOptions> _options = options;
 
-    public GraphWriteOperation WriteInformation(string information)
-    {
-        return WriteInformationAsync(information, CancellationToken.None).Result;
-    }
+    public IEnumerable<GraphWriteOperation> WriteInformation(string information) =>
+        WriteInformationAsync(information,
+                CancellationToken.None)
+            .ToBlockingEnumerable();
 
-    public async Task<GraphWriteOperation> WriteInformationAsync(string information, CancellationToken token)
+    public async IAsyncEnumerable<GraphWriteOperation> WriteInformationAsync(string information,
+        [EnumeratorCancellation] CancellationToken token)
     {
-        var cypherWriteQuery = await GetCypherWriteQueryAsync(information, token);
+        var cypherWriteQuery = await GetCypherWriteQueryAsync(information, token).ConfigureAwait(false);
+
+        GraphWriteOperation currentOperation;
 
         try
         {
             await using (var session = _driver.AsyncSession())
             {
                 _logger?.LogTrace("Executing write query.");
-                await session.ExecuteWriteAsync(runner => runner.RunAsync(cypherWriteQuery));
+                var cursor = await session.ExecuteWriteAsync(runner => runner.RunAsync(cypherWriteQuery)).ConfigureAwait(false);
+
+                currentOperation =  new GraphWriteOperation(OperationResult.Succeeded)
+                {
+                };
             }
         }
         catch (Exception ex)
         {
             _logger?.LogError(ex, "Failed to write information with cypher query.");
-            return new GraphWriteOperation(OperationResult.Failed, ex);
+            currentOperation =  new GraphWriteOperation(OperationResult.Failed, ex);
         }
 
         _logger?.LogTrace("Cypher write query completed successfully.");
 
-        return new GraphWriteOperation(OperationResult.Succeeded);
+        yield return currentOperation;
     }
 
 
     private async Task<string> GetCypherWriteQueryAsync(string information, CancellationToken token)
     {
-        var graphSchema = await GetSchema();
+        // TODO: Add Entity Extraction.
+        var graphSchema = await GetSchema().ConfigureAwait(false);
+
+        var entityExtractionOptions = new EntityExtractionOptions();
+        
+        var entities = await _entityExtractor.ExtractEntitiesAsync(information,
+                entityExtractionOptions,
+                token)
+            .ConfigureAwait(false);
 
         var systemMessage = new StringBuilder(_options.Value.ExtractionInstructions)
             .AppendLine("Database Schema (If Available):")
-            .AppendLine(graphSchema);
+            .AppendLine(graphSchema)
+            .AppendLine("Entities to use: ")
+            .AppendJoin("\n", entities.Select(entity => entity.ToString()));
 
         List<ChatMessage> messages =
         [
